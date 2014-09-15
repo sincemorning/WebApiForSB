@@ -15,6 +15,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 
 /**
  * REST Web Service
@@ -39,15 +40,20 @@ public class GenericResource {
     public String getText() {
         //TODO Get処理を記載する
         //throw new UnsupportedOperationException();
+        AccessMongo mongo = new AccessMongo();
+        DBCursor cur = mongo.select();
+        if(cur != null)
+        {
+            // データが取得できた場合だけ
+        }
         return "Hello World!!(Get)";
     }
 
     /**
      * PUT method for updating or creating an instance of GenericResource
      * @param id
-     * @param name
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
+     * @param tlstring
+     * @param rank
      */
     @PUT
     @Consumes("text/plain")
