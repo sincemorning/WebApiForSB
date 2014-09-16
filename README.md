@@ -1,5 +1,9 @@
 WebApiForSB
-===========
+===========<Br />
+コールするときはこのURL<br />
+http://【ルート】/SBWebApi/webresources/generic<br />
+<br />
+<br />
 ここら辺<br />
 Using CATALINA_BASE:   "C:\apache-tomcat-8.0.12-windows-x64\apache-tomcat-8.0.12"<br />
 Using CATALINA_HOME:   "C:\apache-tomcat-8.0.12-windows-x64\apache-tomcat-8.0.12"<br />
