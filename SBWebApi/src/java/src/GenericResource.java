@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package src;
 
 import javax.ws.rs.core.Context;
@@ -33,6 +32,7 @@ public class GenericResource {
 
     /**
      * Retrieves representation of an instance of src.GenericResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
@@ -42,8 +42,7 @@ public class GenericResource {
         //throw new UnsupportedOperationException();
         AccessMongo mongo = new AccessMongo();
         DBCursor cur = mongo.select();
-        if(cur != null)
-        {
+        if (cur != null) {
             // データが取得できた場合だけ
         }
         return "Hello World!!(Get)";
@@ -51,6 +50,7 @@ public class GenericResource {
 
     /**
      * PUT method for updating or creating an instance of GenericResource
+     *
      * @param id
      * @param tlstring
      * @param rank
@@ -58,16 +58,24 @@ public class GenericResource {
     @PUT
     @Consumes("text/plain")
     public void putText(@PathParam("id") int id, @PathParam("tlstring") String tlstring, @PathParam("rank") int rank) {
-        AccessMongo mongo = new AccessMongo();
+        ReadProperties rp = new ReadProperties();
+        AccessMongo mongo;
+        try {
+            // プロパティファイルから読み込んでmongoのインスタンスを立ち上げる
+            mongo = new AccessMongo(rp.read("db"), Integer.parseInt(rp.read("port")));
+        } catch (Exception ex) {
+            // プロパティファイルからの読み込みに失敗した場合
+            ex.printStackTrace();
+            mongo = new AccessMongo();
+        }
         BasicDBObject bdbobj = new BasicDBObject();
         // いいねなのかツイートなのかによってコールするメソッドをハンドルする
-        if(!tlstring.isEmpty()) {
+        if (!tlstring.isEmpty()) {
             // tlstring(ツイート文字列が空じゃない場合はツイートと判断する)
             bdbobj.append("tlstring", tlstring);
             bdbobj.append("rank", rank);
             mongo.insert(bdbobj);
-        }
-        else {
+        } else {
             // tlstringが空の場合はいいね！扱いにする
             bdbobj.append("id", id);
             mongo.update(bdbobj);

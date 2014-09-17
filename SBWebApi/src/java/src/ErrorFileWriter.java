@@ -7,21 +7,25 @@ package src;
 
 import java.io.*;
 import java.util.*;
+
 /**
  * 外部ファイルにエラーを出力します
+ *
  * @author takumi.hoshi
  */
 public class ErrorFileWriter {
+
     /**
      * コンストラクタ
      */
     public ErrorFileWriter() {
-        
+
     } // ErrorFileWriter()
-    
+
     /**
      * ログファイルにメッセージを吐き出す
-     * @param errMsg 
+     *
+     * @param errMsg
      */
     public void stackTrace(String errMsg) {
         Calendar now = Calendar.getInstance();
@@ -29,9 +33,9 @@ public class ErrorFileWriter {
         //now.get(now.MONTH) + 1
         //now.get(now.DATE)
         File f = new File("Log_");
-        if(f.canWrite()) {
+        if (f.canWrite()) {
             // ファイルを書き込める場合
         }
-        
+
     }
 } // class ErrorFileWriter

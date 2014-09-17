@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package src;
 
 import com.mongodb.BasicDBObject;
@@ -14,44 +13,69 @@ import com.mongodb.Mongo;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  * Mongoへの操作を実装するクラスです
+ *
  * @author Takumi
  */
 public class AccessMongo {
+
+    private String db;
+    private int port;
+
+    /**
+     * デフォルトのコンストラクタ
+     */
+    public AccessMongo() {
+        this.db = "localhost";
+        this.port = 27017;
+    } // AccessMongo()
+
+    /**
+     * 接続先のipとportを指定した形のコンストラクタ
+     *
+     * @param db 接続先
+     * @param port ポート
+     */
+    public AccessMongo(String db, int port) {
+        this.db = db;
+        this.port = port;
+    } // AccessMongo(String db, int port)
+
     /**
      * Mongoへのドキュメントの挿入を行います
+     *
      * @param doc
      */
     public void insert(BasicDBObject doc) {
         try {
-            Mongo mongo = new Mongo("localhost", 27017);
+            Mongo mongo = new Mongo(this.db, this.port);
             DB db = mongo.getDB("tllists");
             // コレクションの取得
             DBCollection collection = db.getCollection("tllists");
-            
+
             // ドキュメントの挿入
             collection.insert(doc);
         } // insert()
         catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     } // insert
-    
+
     /**
-     * Mongoへの更新を行います（いいね！用）
-     * 引数に渡すBasicDBObjectにはidのみを指定する
-     * @param doc 
+     * Mongoへの更新を行います（いいね！用） 引数に渡すBasicDBObjectにはidのみを指定する
+     *
+     * @param doc
      */
     public void update(BasicDBObject doc) {
         try {
-            Mongo mongo = new Mongo("localhost", 27017);
+            Mongo mongo = new Mongo(this.db, this.port);
             DB db = mongo.getDB("tllists");
-            
+
             // コレクションの取得
             DBCollection collection = db.getCollection("tllists");
             collection.update(doc, doc);
@@ -59,22 +83,22 @@ public class AccessMongo {
         catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
+    } // update(BasicDBObject doc)
+
     /**
      * Mongoからの取得を行います
-     * @return 
+     *
+     * @return
      */
     public DBCursor select() {
         try {
-            Mongo mongo = new Mongo("localhost", 27017);
+            Mongo mongo = new Mongo(this.db, this.port);
             DB db = mongo.getDB("tllists");
-            
+
             // コレクションの取得
             DBCollection collection = db.getCollection("tllists");
             return collection.find();
-        } 
-        catch (UnknownHostException ex) {
+        } catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
