@@ -36,7 +36,7 @@ public class GenericResource {
      * @return an instance of java.lang.String
      */
     @GET
-    @Produces("text/plain")
+    @Produces("application/json")
     public String getText() {
         //TODO Get処理を記載する
         //throw new UnsupportedOperationException();
@@ -58,7 +58,6 @@ public class GenericResource {
     @PUT
     @Consumes("text/plain")
     public void putText(@PathParam("id") int id, @PathParam("tlstring") String tlstring, @PathParam("rank") int rank) {
-        //TODO Mongoへのput処理を記載する
         AccessMongo mongo = new AccessMongo();
         BasicDBObject bdbobj = new BasicDBObject();
         // いいねなのかツイートなのかによってコールするメソッドをハンドルする
@@ -71,7 +70,7 @@ public class GenericResource {
         else {
             // tlstringが空の場合はいいね！扱いにする
             bdbobj.append("id", id);
+            mongo.update(bdbobj);
         }
-        
     } // putText
 }

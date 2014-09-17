@@ -44,11 +44,22 @@ public class AccessMongo {
     
     /**
      * Mongoへの更新を行います（いいね！用）
+     * 引数に渡すBasicDBObjectにはidのみを指定する
      * @param doc 
      */
     public void update(BasicDBObject doc) {
-        
-    } // update
+        try {
+            Mongo mongo = new Mongo("localhost", 27017);
+            DB db = mongo.getDB("tllists");
+            
+            // コレクションの取得
+            DBCollection collection = db.getCollection("tllists");
+            collection.update(doc, doc);
+        } // update
+        catch (UnknownHostException ex) {
+            Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /**
      * Mongoからの取得を行います
