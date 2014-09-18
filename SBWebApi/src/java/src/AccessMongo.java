@@ -26,6 +26,7 @@ public class AccessMongo {
 
     /**
      * デフォルトのコンストラクタ
+     * 接続先はlocalhostのポート27017
      */
     public AccessMongo() {
         this.db = "localhost";
@@ -51,9 +52,9 @@ public class AccessMongo {
     public void insert(BasicDBObject doc) {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB db = mongo.getDB("tllists");
+            DB mongoDb = mongo.getDB("tllists");
             // コレクションの取得
-            DBCollection collection = db.getCollection("tllists");
+            DBCollection collection = mongoDb.getCollection("tllists");
 
             // ドキュメントの挿入
             collection.insert(doc);
@@ -74,10 +75,10 @@ public class AccessMongo {
     public void update(BasicDBObject doc) {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB db = mongo.getDB("tllists");
+            DB mongoDb = mongo.getDB("tllists");
 
             // コレクションの取得
-            DBCollection collection = db.getCollection("tllists");
+            DBCollection collection = mongoDb.getCollection("tllists");
             collection.update(doc, doc);
         } // update
         catch (UnknownHostException ex) {
@@ -88,15 +89,15 @@ public class AccessMongo {
     /**
      * Mongoからの取得を行います
      *
-     * @return
+     * @return Mongoからの取得データを格納したDBCollection
      */
     public DBCursor select() {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB db = mongo.getDB("tllists");
+            DB mongoDb = mongo.getDB("tllists");
 
             // コレクションの取得
-            DBCollection collection = db.getCollection("tllists");
+            DBCollection collection = mongoDb.getCollection("tllists");
             return collection.find();
         } catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);

@@ -22,8 +22,7 @@ public class ReadProperties {
         final Properties prop = new Properties();
         InputStream inStream = null;
         try {
-            inStream = new BufferedInputStream(
-                    new FileInputStream("properties/prop.properties"));
+            inStream = new BufferedInputStream(new FileInputStream("properties/prop.properties"));
             prop.load(inStream);
         } catch (IOException e) {
             // TODO:エラーログへの出力処理を記載
