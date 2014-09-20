@@ -19,11 +19,11 @@ import java.util.Properties;
 public class ReadProperties {
 
     public String read(String key) {
-        final Properties prop = new Properties();
+        Properties prop = new Properties();
         InputStream inStream = null;
         try {
             inStream = new BufferedInputStream(
-                    new FileInputStream("properties/prop.properties"));
+                    new FileInputStream("C:\\Users\\Takumi\\Documents\\NetBeansProjects\\Work\\WebApiForSBWork\\SBWebApi\\nbproject\\prop.properties"));
             prop.load(inStream);
         } catch (IOException e) {
             // TODO:エラーログへの出力処理を記載

@@ -15,6 +15,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import javax.ws.rs.HeaderParam;
+import static javax.ws.rs.HttpMethod.POST;
+import javax.ws.rs.POST;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+import org.bson.types.ObjectId;
 
 /**
  * REST Web Service
@@ -38,47 +44,63 @@ public class GenericResource {
     @GET
     @Produces("application/json")
     public String getText() {
-        //TODO Get処理を記載する
-        //throw new UnsupportedOperationException();
-        AccessMongo mongo = new AccessMongo();
+        AccessMongo mongo;
+        try {
+            // プロパティファイルから読み込んでmongoのインスタンスを立ち上げる
+            //mongo = new AccessMongo(rp.read("db"), Integer.parseInt(rp.read("port")));
+            mongo = new AccessMongo();
+        } catch (Exception ex) {
+            // プロパティファイルからの読み込みに失敗した場合
+            ex.printStackTrace();
+            mongo = new AccessMongo();
+        }
+        String lists = "";
         DBCursor cur = mongo.select();
         if (cur != null) {
             // データが取得できた場合だけ
+            lists += cur.next();
         }
-        return "Hello World!!(Get)";
+        return lists;
     }
 
     /**
      * PUT method for updating or creating an instance of GenericResource
      *
      * @param id
+     * @param nickname
      * @param tlstring
      * @param rank
      */
     @PUT
     @Consumes("text/plain")
-    public void putText(@PathParam("id") int id, @PathParam("tlstring") String tlstring, @PathParam("rank") int rank) {
-        ReadProperties rp = new ReadProperties();
+    public void putText(@HeaderParam("id") String id, @HeaderParam("nickname") String nickname, @HeaderParam("tlstring") String tlstring, @HeaderParam("rank") int rank) {
+        //ReadProperties rp = new ReadProperties();
         AccessMongo mongo;
         try {
             // プロパティファイルから読み込んでmongoのインスタンスを立ち上げる
-            mongo = new AccessMongo(rp.read("db"), Integer.parseInt(rp.read("port")));
+            //mongo = new AccessMongo(rp.read("db"), Integer.parseInt(rp.read("port")));
+            mongo = new AccessMongo();
         } catch (Exception ex) {
             // プロパティファイルからの読み込みに失敗した場合
             ex.printStackTrace();
             mongo = new AccessMongo();
         }
+
         BasicDBObject bdbobj = new BasicDBObject();
         // いいねなのかツイートなのかによってコールするメソッドをハンドルする
-        if (!tlstring.isEmpty()) {
+        if (tlstring != null && !tlstring.isEmpty()) {
             // tlstring(ツイート文字列が空じゃない場合はツイートと判断する)
-            bdbobj.append("tlstring", tlstring);
-            bdbobj.append("rank", rank);
+            bdbobj.put("nickname", nickname);
+            bdbobj.put("tlstring", tlstring);
+            bdbobj.put("rank", rank);
+            // いいねは常に0で登録する
+            bdbobj.put("sogood", 0);
             mongo.insert(bdbobj);
         } else {
             // tlstringが空の場合はいいね！扱いにする
-            bdbobj.append("id", id);
+            bdbobj.append("_id", new ObjectId(id));
             mongo.update(bdbobj);
         }
+
     } // putText
 }

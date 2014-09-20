@@ -9,6 +9,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -51,9 +52,9 @@ public class AccessMongo {
     public void insert(BasicDBObject doc) {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB db = mongo.getDB("tllists");
+            DB mondb = mongo.getDB("tllists");
             // コレクションの取得
-            DBCollection collection = db.getCollection("tllists");
+            DBCollection collection = mondb.getCollection("tllists");
 
             // ドキュメントの挿入
             collection.insert(doc);
@@ -74,11 +75,16 @@ public class AccessMongo {
     public void update(BasicDBObject doc) {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB db = mongo.getDB("tllists");
-
+            DB mongodb = mongo.getDB("tllists");
             // コレクションの取得
-            DBCollection collection = db.getCollection("tllists");
-            collection.update(doc, doc);
+            DBCollection collection = mongodb.getCollection("tllists");
+            DBObject found = collection.findOne(doc);
+            int sogood = 0;
+            sogood = Integer.parseInt(found.get("sogood").toString());
+            sogood++;
+
+            found.put("soogood", sogood);
+            collection.update(doc, found);
         } // update
         catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,10 +99,10 @@ public class AccessMongo {
     public DBCursor select() {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB db = mongo.getDB("tllists");
+            DB mongdb = mongo.getDB("tllists");
 
-            // コレクションの取得
-            DBCollection collection = db.getCollection("tllists");
+            // コレクションの全件取得
+            DBCollection collection = mongdb.getCollection("tllists");
             return collection.find();
         } catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
