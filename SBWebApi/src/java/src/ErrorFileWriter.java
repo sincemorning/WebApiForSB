@@ -32,7 +32,9 @@ public class ErrorFileWriter {
         //now.get(now.YEAR)
         //now.get(now.MONTH) + 1
         //now.get(now.DATE)
-        File f = new File("Log_");
+        String today = Integer.toString(now.get(now.YEAR)) + Integer.toString(now.get(now.MONTH) + 1) + Integer.toString(now.get(now.DATE));
+        
+        File f = new File("Log_" + today);
         if (f.canWrite()) {
             // ファイルを書き込める場合
         }

@@ -27,6 +27,7 @@ public class AccessMongo {
 
     /**
      * デフォルトのコンストラクタ
+     * 接続先はlocalhostのポート27017
      */
     public AccessMongo() {
         this.db = "localhost";
@@ -52,10 +53,9 @@ public class AccessMongo {
     public void insert(BasicDBObject doc) {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB mondb = mongo.getDB("tllists");
+            DB mongoDb = mongo.getDB("tllists");
             // コレクションの取得
-            DBCollection collection = mondb.getCollection("tllists");
-
+            DBCollection collection = mongoDb.getCollection("tllists");
             // ドキュメントの挿入
             collection.insert(doc);
         } // insert()
@@ -75,14 +75,15 @@ public class AccessMongo {
     public void update(BasicDBObject doc) {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB mongodb = mongo.getDB("tllists");
+
+            DB mongoDb = mongo.getDB("tllists");
             // コレクションの取得
-            DBCollection collection = mongodb.getCollection("tllists");
+
+            DBCollection collection = mongoDb.getCollection("tllists");
             DBObject found = collection.findOne(doc);
             int sogood = 0;
             sogood = Integer.parseInt(found.get("sogood").toString());
             sogood++;
-
             found.put("soogood", sogood);
             collection.update(doc, found);
         } // update
@@ -94,15 +95,17 @@ public class AccessMongo {
     /**
      * Mongoからの取得を行います
      *
-     * @return
+     * @return Mongoからの取得データを格納したDBCollection
      */
     public DBCursor select() {
         try {
             Mongo mongo = new Mongo(this.db, this.port);
-            DB mongdb = mongo.getDB("tllists");
+
+            DB mongoDb = mongo.getDB("tllists");
 
             // コレクションの全件取得
-            DBCollection collection = mongdb.getCollection("tllists");
+
+            DBCollection collection = mongoDb.getCollection("tllists");
             return collection.find();
         } catch (UnknownHostException ex) {
             Logger.getLogger(AccessMongo.class.getName()).log(Level.SEVERE, null, ex);
