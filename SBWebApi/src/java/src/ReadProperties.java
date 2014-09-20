@@ -23,7 +23,7 @@ public class ReadProperties {
         InputStream inStream = null;
         try {
             inStream = new BufferedInputStream(
-                    new FileInputStream("C:\\Users\\Takumi\\Documents\\NetBeansProjects\\Work\\WebApiForSBWork\\SBWebApi\\nbproject\\prop.properties"));
+                    new FileInputStream("prop/prop.properties"));
             prop.load(inStream);
         } catch (IOException e) {
             // TODO:エラーログへの出力処理を記載
