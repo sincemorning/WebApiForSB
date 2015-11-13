@@ -84,6 +84,7 @@ public class GenericResource {
             // プロパティファイルからの読み込みに失敗した場合
             ex.printStackTrace();
             mongo = new AccessMongo();
+            System.out.println("aaaa");
         }
 
         BasicDBObject bdbobj = new BasicDBObject();
